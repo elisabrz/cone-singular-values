@@ -1,5 +1,56 @@
+'''
+% [u,v,e] = AlternatingOptimization(A,options)
+%
+% Alternating optimization for solving
+%
+%           min_{u in P, v in Q, ||u||=||v||=1} <u, Av>    (1)
+%
+% where
+%       P = {u | u = G*x, x >= 0}, or
+%         = {u | G*u >= g}, or
+%         = {x | x >= 0}, (defaut) or
+%         = {x | mat(x) is positive semidefinite (PSD)}.
+%
+% *** Input ***
+%   A              : m-by-n matrix
+%
+% options:
+%   maxiter        : maximum number of iterations (default = 500)
+%   accuracy       : continue when  [ ||uk-1 - uk|| >= accuracy or
+%                                     ||vk-1 - vk|| <= accuracy ]
+%                               and objetive(k-1)-objective(k) >= accuracy
+%                    (default = 1e-4)
+%   cone.P         : type of cones, we have implemented 3 cases:
+%                    1) 'generator': P = { u | u = options.G*x, x >= 0}
+%                       In that case, options.G provides the generators
+%                    2) 'nonnegort': P = { u | u >= 0}
+%                    3) 'semidefin': P = { u | mat(u) is PSD}
+%                    4) 'facetsrep': P = { u | options.G*u >= options.g}
+%   cone.Q         : same structure as .P
+%   G, H           : When options.cone.P = 'generator' or 'facetsrep'
+%                     G is required, and similarly for Q and H.
+%                    In the case 'generator':
+%                    The columns of G (resp. H) are the rays of P (resp. Q)
+%                    hence G (m-by-k) u = G*x in P for some x >= 0.
+%                      and H (n-by-p) v = H*y in Q for some y >= 0.
+%   g,h              In the case 'facetsrep':
+%                    G provides the inequalities for P = {u | G*u >= g}
+%                    H provides the inequalities for Q = {v | H*v >= h}
+%                    default: g=0, h=0
+%   v0             : initializations for the algorithm.
+%                     default: v <-- argmin_{v in Q} (u^TA) v
+%                               where u is randn(m,1).
+%
+% *** Output ***
+%   (u,v) in PxQ   : approximate solution to Problem (1)
+%    e             : evolution of u'*A*v
+'''
+
+
 import numpy as np
 import time
+import update_cone
+
 
 def AlternatingOptimization(A, options=None):
     start_time = time.time()
