@@ -6,7 +6,7 @@
 
 
 import numpy as np
-import projectNonnegOrthnorm1
+from projectNonnegOrthnorm1 import projectNonnegOrthnorm1
 
 def projectPSDnorm1(Q):
     n = Q.shape[0]
