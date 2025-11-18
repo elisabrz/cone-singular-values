@@ -14,7 +14,7 @@ Pour le cas de la Figure 2, on utilise 'generator' avec G la matrice de Schur et
 
 import numpy as np
 from optimize_cone_generators import optimize_cone_generators
-from optimize_cone_facets import optimize_cone_facets
+#from optimize_cone_facets import optimize_cone_facets
 from projectNonnegOrthnorm1 import projectNonnegOrthnorm1
 from projectPSDnorm1 import projectPSDnorm1
 from vec import vec
@@ -40,13 +40,13 @@ def update_cone(Av, coneP, G=None, g=None):
     u : ndarray
         Projected vector
     """
-    if coneP == 'generator':
+    if coneP == 'generator': #car si generator tu sais appliquer gurobi 
         # Solve max u^T*Av such that ||u||=1, u=G*x, x>= 0
         u = optimize_cone_generators(G, Av)
-    elif coneP == 'facetsrep':
+    #elif coneP == 'facetsrep':
         # Solve max u^T*Av such that ||u||=1, G*u >= 0
-        u = optimize_cone_facets(G, g, Av)
-    elif coneP == 'nonnegort':
+        #u = optimize_cone_facets(G, g, Av)
+    elif coneP == 'nonnegort': #resous le pb d'optimisation en cherchant la direction qui pointe vers le plus négatif
         u = projectNonnegOrthnorm1(Av)
     elif coneP == 'semidefin':
         n = len(Av)
