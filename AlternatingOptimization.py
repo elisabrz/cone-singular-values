@@ -132,7 +132,7 @@ def AlternatingOptimization(A, options=None):
     while (
         i <= options['maxiter']
         and (rs == 1 or np.linalg.norm(v - vp) >= options['accuracy'] or np.linalg.norm(u - up) >= options['accuracy']
-        or (i <= 3 or abs(e[i-2] - e[i-1]) >= options['accuracy'] * abs(e[i-2]) if i >= 3 else True))
+        or (len(e) < 2 or abs(e[-2] - e[-1]) >= options['accuracy'] * abs(e[-2])))
     ):
         rs = 0
         up = u.copy()
@@ -155,13 +155,13 @@ def AlternatingOptimization(A, options=None):
         else:
             ve = v.copy()
         # Update extrapolation parameters
-        if i >= 2 and e[i-2] < e[i-1] and options['beta'] > 0:    # Attention à l'indice i : en python, premier élément d'une liste est e[0] mais en matlab e(1)
+        if len(e) >= 2 and e[-2] < e[-1] and options['beta'] > 0:    # Attention à l'indice i : en python, premier élément d'une liste est e[0] mais en matlab e(1)
             beta_p = options['beta'] / options['eta']
             options['beta'] = 0
             u = up.copy()
             v = vp.copy()
             ve = vp.copy()
-            e[i-1] = e[i-2]
+            e[-1] = e[-2]
             rs = 1
             # Next step will not extrapolate
         else:

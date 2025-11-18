@@ -48,7 +48,8 @@ options = {
     'G': G,
     'accuracy': 1e-6,
     'maxiter': 500,
-    'beta': 0.5
+    'beta': 0.5,
+    'display': 1
 }
 tol = 1e-8
 
@@ -93,6 +94,8 @@ EAO_all = np.arccos(EAO_all) / np.pi
 EAO_mean = np.mean(EAO_all, axis=0)
 
 
+
+'''
 ## Schur - Schur
 
 A = np.eye(n)
@@ -151,3 +154,5 @@ for j in range(Ninitpoint):  # for all random initial points
 EAO_all_schur = np.arccos(EAO_all_schur) / np.pi
 # average of all runs
 EAO_mean_schur = np.mean(EAO_all_schur, axis=0)
+
+'''

@@ -42,7 +42,7 @@ def update_cone(Av, coneP, G=None, g=None):
     """
     if coneP == 'generator': #car si generator tu sais appliquer gurobi 
         # Solve max u^T*Av such that ||u||=1, u=G*x, x>= 0
-        u = optimize_cone_generators(G, Av)
+        u, _ = optimize_cone_generators(G, Av)
     #elif coneP == 'facetsrep':
         # Solve max u^T*Av such that ||u||=1, G*u >= 0
         #u = optimize_cone_facets(G, g, Av)
