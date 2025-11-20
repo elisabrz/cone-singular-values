@@ -29,7 +29,7 @@ from AlternatingOptimization import AlternatingOptimization
 # Parameters
 n = 200
 timelimit = 10
-Ninitpoint = 100
+Ninitpoint = 5
 # timemult is how many timestamps we log each second for E-AO
 timemult = 100
 Ndisctime = timelimit * timemult
@@ -92,6 +92,10 @@ for j in range(Ninitpoint):  # for all random initial points
 EAO_all = np.arccos(EAO_all) / np.pi
 # average of all runs
 EAO_mean = np.mean(EAO_all, axis=0)
+
+print(EAO_all)
+print("\n")
+print(EAO_mean)
 
 
 
