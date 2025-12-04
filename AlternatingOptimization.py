@@ -114,11 +114,12 @@ def AlternatingOptimization(A, options=None):
         print(f"u0 : {u0}")
         options['v0'] = update_cone(A.T @ u0, options['cone']['Q'], options['H'], options['h'])
     v0 = options['v0']
-    print(f"v0 : {v0}")
+    #print(f"v0 : {v0}")
     v = np.zeros_like(v0)
     ve = v0.copy()
     vp = np.zeros_like(v0)
     u = np.zeros(m)
+
     ue = np.zeros(m)
     up = np.zeros(m)
     i = 1

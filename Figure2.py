@@ -25,7 +25,6 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.append(os.path.join(parent_dir, 'algorithms'))
 
 from AlternatingOptimization import AlternatingOptimization
-
 # Parameters
 n = 200
 timelimit = 10
