@@ -211,8 +211,14 @@ def run_comparison_optimized(dimensions=None, timelimit=10,
                 if verbose:
                     print(f"\n  Incremental Results:")
                     print(f"    Angle: {inc_results['angle']:.8f}π")
-                    print(f"    Time:  {inc_results['time']:.3f}s")
-                    print(f"    Speedup vs E-AO: {eao_time/inc_results['time']:.1f}x")
+                    print(f"    Time:  {inc_results['time']:.4f}s")
+                    # Avoid division by zero
+                    if inc_results['time'] > 0:
+                        speedup = eao_time / inc_results['time']
+                        print(f"    Speedup vs E-AO: {speedup:.1f}x")
+                    else:
+                        print(f"    Speedup vs E-AO: >100000x (too fast to measure)")
+
         
         all_results.append(result)
     
@@ -234,15 +240,30 @@ def run_comparison_optimized(dimensions=None, timelimit=10,
         
         if 'inc_angle' in row and row['inc_angle'] is not None:
             line += f" {row['inc_angle']:>11.8f}π"
-            line += f" {row['inc_time']:>7.3f}s"
-            line += f" {row['eao_time']/row['inc_time']:>7.1f}x"
+            line += f" {row['inc_time']:>7.4f}s"  # More precision for small times
+            # Avoid division by zero
+            if row['inc_time'] > 0:
+                speedup = row['eao_time'] / row['inc_time']
+                line += f" {speedup:>7.0f}x"
+            else:
+                line += f" {'>100k':>7s}x"
         
         print(line)
     
     # Stats
     print("\n" + "="*70)
     if test_incremental_flag:
-        print(f"Average speedup: {(df['eao_time']/df['inc_time']).mean():.1f}x")
+        # Compute average speedup, avoiding division by zero
+        valid_speedups = []
+        for _, row in df.iterrows():
+            if 'inc_time' in row and row['inc_time'] > 0:
+                valid_speedups.append(row['eao_time'] / row['inc_time'])
+        
+        if valid_speedups:
+            print(f"Average speedup: {np.mean(valid_speedups):.0f}x")
+        else:
+            print(f"Average speedup: >100000x")
+        
         print(f"Total time saved: {(df['eao_time'].sum() - df['inc_time'].sum()):.1f}s")
     
     print(f"Average E-AO runs before stopping: {df['eao_num_runs'].mean():.1f}")
