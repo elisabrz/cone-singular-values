@@ -49,7 +49,7 @@
 
 import numpy as np
 import time
-from update_cone import update_cone
+from utils.update_cone import update_cone
 
 
 def AlternatingOptimization(A, options=None):

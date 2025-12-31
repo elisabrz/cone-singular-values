@@ -17,7 +17,7 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.append(os.path.join(parent_dir, 'algorithms'))
 
 from AlternatingOptimization import AlternatingOptimization
-from IncrementalStrat import IncrementalStrategy
+from Archives.IncrementalStrat import IncrementalStrategy
 
 timelimit = 10
 Ninitpoint = 5
@@ -134,7 +134,7 @@ for i in range(4):
                     options_incremental, 
                     growth_scheme=scheme,
                     initial_size=initial_size,
-                    extension_method='small',
+                    extension_method='random_uniform',
                     display=False,
                     final_run=USE_FINAL_RUN,  # Use the global setting
                     max_intermediate_iter=50

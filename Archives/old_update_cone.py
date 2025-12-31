@@ -13,11 +13,11 @@ Pour le cas de la Figure 2, on utilise 'generator' avec G la matrice de Schur et
 """
 
 import numpy as np
-from optimize_cone_generators import optimize_cone_generators
+from utils.optimize_cone_generators import optimize_cone_generators
 #from optimize_cone_facets import optimize_cone_facets
-from projectNonnegOrthnorm1 import projectNonnegOrthnorm1
-from projectPSDnorm1 import projectPSDnorm1
-from vec import vec
+from projections.projectNonnegOrthnorm1 import projectNonnegOrthnorm1
+from projections.projectPSDnorm1 import projectPSDnorm1
+from utils.vec import vec
 
 
 def update_cone(Av, coneP, G=None, g=None):

@@ -58,6 +58,8 @@ def extend_vector(v, new_dim, extension_method='random', preserve_structure=True
     if extension_method == 'random':
         # Use much smaller random values to avoid disrupting the solution
         v_extended[len(v):] = np.random.randn(num_new) * 0.01
+    elif extension_method == 'random_uniform':
+        v_extended[len(v):] = np.random.uniform(0, 0.01, size=num_new)
     elif extension_method == 'zero':
         v_extended[len(v):] = 0
     elif extension_method == 'small':
@@ -276,7 +278,7 @@ def IncrementalStrategy(A, options, growth_scheme='square_first',
         
         # Safety check to avoid infinite loops
         if t > 100:
-            print("Warning: Maximum iterations reached")
+            #print("Warning: Maximum iterations reached")
             break
     
     return u_opt, v_opt, all_objectives
