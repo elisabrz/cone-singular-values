@@ -1,8 +1,5 @@
 """
-update_cone.py - Unified interface for cone projections
-
-This module provides a unified interface for updating vectors within different cones.
-For generator cones, it calls optimize_cone_generators with the appropriate sign.
+Unified interface for cone projections
 """
 
 import numpy as np
@@ -13,45 +10,56 @@ from projections.projectPSDnorm1 import projectPSDnorm1
 
 def update_cone(Av, coneP, G=None, g=None):
     """
-    Update cone projection - unified interface
-    
-    For angle MAXIMIZATION problems (like Schur vs R+):
-    - We want to MAXIMIZE <u, Av>
-    - But optimize_cone_generators does MINIMIZATION
-    - Solution: Pass -Av to get max instead of min
+    Project vector onto cone
     
     Parameters
     ----------
     Av : ndarray
         Vector to project
     coneP : str
-        Type of cone: 'generator', 'nonnegort', 'semidefin'
+        Cone type: 'generator', 'nonnegort', or 'semidefin'
     G : ndarray, optional
         Generator matrix (required if coneP='generator')
     g : ndarray, optional
-        Additional parameter (not used currently)
+        Not used currently
     
     Returns
     -------
     u : ndarray
-        Projected vector
+        Projected unit vector
     """
     
     if coneP == 'generator':
         if G is None:
-            raise ValueError("Generator matrix G is required for 'generator' cone")
+            raise ValueError("Generator matrix G required for 'generator' cone")
         
-        u, info = optimize_cone_generators(G, Av)  
+        u, _ = optimize_cone_generators(G, Av)
         return u
     
     elif coneP == 'nonnegort':
-        # Nonnegative orthant with norm 1
         u = projectNonnegOrthnorm1(Av)
         return u
     
     elif coneP == 'semidefin':
-        # PSD cone with norm 1
-        u = projectPSDnorm1(Av)
+        # CRITICAL: projectPSDnorm1 expects a MATRIX, not a vector!
+        # We need to reshape the vector Av to a matrix Q
+        
+        # Infer matrix dimension from vector length
+        n_squared = len(Av)
+        n = int(np.sqrt(n_squared))
+        
+        if n * n != n_squared:
+            raise ValueError(f"len(Av)={n_squared} is not a perfect square for PSD cone")
+        
+        # Reshape vector to n×n matrix (column-major order like MATLAB)
+        Q = Av.reshape((n, n), order='F')
+        
+        # Project onto PSD cone (Q is now a matrix)
+        Qp = projectPSDnorm1(Q)
+        
+        # Reshape back to vector (column-major order)
+        u = Qp.flatten(order='F')
+        
         return u
     
     else:
