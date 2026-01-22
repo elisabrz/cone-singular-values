@@ -178,7 +178,7 @@ for i in range(4):
             time_to_best = 0
             iters_to_best = 0
             total_iters = 0
-            best_size_m = 0  # NEW: Track size where best was found
+            best_size_m = 0  # Track size where best was found
             best_size_n = 0
             best_step_idx = 0
             
@@ -206,12 +206,10 @@ for i in range(4):
                 if e[-1] < emin - tol:
                     emin = e[-1]
                     best_info = info
-                    # Record WHEN this best was found
+                    # Record when this best was found
                     time_to_best = T
                     iters_to_best = total_iters
                     
-                    # NEW: Find which step had the best value
-                    # The last step with improvement is the one that found it
                     # Look at the final objective of each step
                     best_obj_per_step = [step['objective'] for step in info]
                     best_step_idx = np.argmin(best_obj_per_step)
